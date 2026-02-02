@@ -18,7 +18,8 @@ import {
   Bot,       // Added for Robotics
   Activity,  // Added for IoT
   Monitor,   // Added for Dashboard
-  Instagram  // Added for Instagram
+  Instagram, // Added for Instagram
+  Phone      // Added for Phone display
 } from 'lucide-react';
 
 // --- Data Constants ---
@@ -595,7 +596,7 @@ const App = () => {
                 I am currently open to research collaborations, internships, and opportunities in the field of Nanotechnology, MEMS, and Microfluidics.
             </p>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Email Block */}
                 <a href={`mailto:${PERSONAL_INFO.email}`} className="group flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-cyan-500/50 hover:bg-white/10 transition-all">
                     <div className="p-3 rounded-full bg-slate-900 group-hover:bg-cyan-500 group-hover:text-white transition-colors">
@@ -603,9 +604,34 @@ const App = () => {
                     </div>
                     <div className="text-left">
                         <div className="text-xs text-slate-500 uppercase tracking-wider">Email</div>
-                        <div className="text-white font-medium truncate w-full">{PERSONAL_INFO.email}</div>
+                        <div className="text-white font-medium truncate w-full max-w-[200px]">{PERSONAL_INFO.email}</div>
                     </div>
                 </a>
+
+                 {/* Phone Block */}
+                 <div className="group flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-green-500/50 hover:bg-white/10 transition-all">
+                    <div className="p-3 rounded-full bg-slate-900 group-hover:bg-green-600 group-hover:text-white transition-colors">
+                        <Phone size={24} />
+                    </div>
+                    <div className="text-left">
+                        <div className="text-xs text-slate-500 uppercase tracking-wider">Phone</div>
+                        <div className="text-white font-medium text-sm flex flex-col">
+                            <span>+91 727-802-4495</span>
+                            <span>+46 76-444-3846</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Location Block */}
+                <div className="group flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-purple-500/50 hover:bg-white/10 transition-all">
+                    <div className="p-3 rounded-full bg-slate-900 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                        <MapPin size={24} />
+                    </div>
+                    <div className="text-left">
+                        <div className="text-xs text-slate-500 uppercase tracking-wider">Location</div>
+                        <div className="text-white font-medium">{PERSONAL_INFO.location}</div>
+                    </div>
+                </div>
 
                 {/* LinkedIn Block */}
                 <a href={PERSONAL_INFO.linkedin} target="_blank" rel="noreferrer" className="group flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-blue-500/50 hover:bg-white/10 transition-all">
