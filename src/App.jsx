@@ -20,7 +20,10 @@ import {
   Monitor,   
   Instagram, 
   Phone,
-  GraduationCap
+  GraduationCap,
+  Home, // Added for Mobile Nav
+  Briefcase, // Added for Mobile Nav
+  Layers // Added for Mobile Nav
 } from 'lucide-react';
 
 // --- Data Constants ---
@@ -215,32 +218,10 @@ const SectionHeading = ({ title, subtitle, icon: Icon }) => (
   </div>
 );
 
-const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+// --- Navigation Components ---
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToSection = (e, href) => {
-    e.preventDefault();
-    const element = document.querySelector(href);
-    if (element) {
-      const offset = 80; // Buffer for fixed navbar
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
-      setIsOpen(false);
-    }
-  };
-
+// Desktop Navigation (Top Bar)
+const DesktopNavbar = ({ scrolled, scrollToSection }) => {
   const navLinks = [
     { name: 'About', href: '#about' },
     { name: 'Experience', href: '#experience' },
@@ -250,14 +231,18 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-slate-900/80 backdrop-blur-lg shadow-lg' : 'bg-transparent'}`}>
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 transform translate-z-0 hidden md:block ${
+      scrolled 
+        ? 'bg-slate-900/90 backdrop-blur-md shadow-sm shadow-slate-950/50' 
+        : 'bg-transparent'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0 font-bold text-xl tracking-tighter text-white">
             Ritam<span className="text-cyan-400"> Biswas</span>
           </div>
           
-          <div className="hidden md:block">
+          <div>
             <div className="ml-10 flex items-baseline space-x-8">
               {navLinks.map((link) => (
                 <a 
@@ -278,61 +263,67 @@ const Navbar = () => {
               </a>
             </div>
           </div>
-          
-          <div className="md:hidden">
-            <button onClick={() => setIsOpen(!isOpen)} className="text-slate-300 hover:text-white p-2">
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
         </div>
       </div>
-
-      {/* Mobile menu */}
-      {isOpen && (
-        <div className="md:hidden bg-slate-950/95 backdrop-blur-lg border-b border-white/10 absolute w-full top-16 left-0 z-40">
-          <div className="px-4 pt-2 pb-6 space-y-1">
-            {navLinks.map((link) => (
-              <a 
-                key={link.name} 
-                href={link.href} 
-                onClick={(e) => scrollToSection(e, link.href)}
-                className="text-slate-300 hover:text-white hover:bg-white/5 block px-3 py-4 rounded-md text-lg font-medium cursor-pointer border-b border-white/5"
-              >
-                {link.name}
-              </a>
-            ))}
-            <a 
-                href="#contact" 
-                onClick={(e) => scrollToSection(e, '#contact')}
-                className="text-cyan-400 hover:text-cyan-300 block px-3 py-4 text-lg font-bold cursor-pointer"
-              >
-                Contact Me
-              </a>
-          </div>
-        </div>
-      )}
     </nav>
   );
 };
 
-const Hero = () => {
-  const scrollToSection = (e, href) => {
-    e.preventDefault();
-    const element = document.querySelector(href);
-    if (element) {
-      const offset = 80; // Buffer for fixed navbar
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - offset;
+// Mobile Top Bar (Branding Only)
+const MobileTopBar = ({ scrolled }) => (
+  <nav className={`fixed top-0 w-full z-50 transition-all duration-300 transform translate-z-0 md:hidden ${
+    scrolled 
+      ? 'bg-slate-900/90 backdrop-blur-md shadow-sm shadow-slate-950/50' 
+      : 'bg-transparent'
+  }`}>
+    <div className="max-w-7xl mx-auto px-6">
+      <div className="flex items-center justify-center h-16">
+        <div className="font-bold text-xl tracking-tighter text-white">
+          Ritam<span className="text-cyan-400"> Biswas</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+);
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth"
-      });
-    }
-  };
+// Mobile Bottom Navigation (App-like Dock)
+const MobileBottomNav = ({ scrollToSection, activeSection }) => {
+  const navItems = [
+    { name: 'Home', href: '#hero', icon: Home },
+    { name: 'Exp', href: '#experience', icon: Briefcase },
+    { name: 'Projects', href: '#projects', icon: Layers },
+    { name: 'Skills', href: '#skills', icon: Cpu },
+    { name: 'Contact', href: '#contact', icon: Mail },
+  ];
 
   return (
-    <div className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-slate-950 pt-16">
+    <div className="fixed bottom-4 left-4 right-4 z-50 md:hidden">
+      <div className="bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl shadow-slate-950/50 flex justify-between items-center px-4 py-3">
+        {navItems.map((item) => {
+          const Icon = item.icon;
+          const isActive = activeSection === item.href.substring(1);
+          return (
+            <a
+              key={item.name}
+              href={item.href}
+              onClick={(e) => scrollToSection(e, item.href)}
+              className={`flex flex-col items-center gap-1 transition-all duration-300 ${
+                isActive ? 'text-cyan-400 scale-110' : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+              <span className="text-[10px] font-medium">{item.name}</span>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+const Hero = ({ scrollToSection }) => {
+  return (
+    <div id="hero" className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-slate-950 pt-16">
       {/* Background Effects - overflow handled by parent */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] right-[-5%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-purple-600/20 rounded-full blur-[80px] md:blur-[120px]" />
@@ -375,7 +366,7 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Abstract Visualization - Hidden on very small screens if needed, or scaled */}
+        {/* Abstract Visualization */}
         <div className="flex-1 w-full max-w-sm md:max-w-full relative mt-8 md:mt-0">
             <div className="relative aspect-square rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-8 shadow-2xl overflow-hidden group">
                 {/* Decorative Grid */}
@@ -451,13 +442,39 @@ const ExperienceCard = ({ item, isLast }) => {
 };
 
 const App = () => {
-  const [activeTab, setActiveTab] = useState('all');
+  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSection = (e, href) => {
+    e.preventDefault();
+    const element = document.querySelector(href);
+    if (element) {
+      const offset = 80; 
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.scrollY - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+      setActiveSection(href.substring(1));
+    }
+  };
 
   return (
-    <div className="bg-slate-950 min-h-screen text-slate-300 font-sans selection:bg-cyan-500/30 selection:text-cyan-100 overflow-x-hidden">
-      <Navbar />
+    // Added pb-24 for mobile to account for bottom nav
+    <div className="bg-slate-950 min-h-screen text-slate-300 font-sans selection:bg-cyan-500/30 selection:text-cyan-100 overflow-x-hidden md:pb-0 pb-24">
+      <DesktopNavbar scrolled={scrolled} scrollToSection={scrollToSection} />
+      <MobileTopBar scrolled={scrolled} />
+      <MobileBottomNav scrollToSection={scrollToSection} activeSection={activeSection} />
       
-      <Hero />
+      <Hero scrollToSection={scrollToSection} />
 
       {/* About Section */}
       <section id="about" className="py-20 md:py-32 bg-slate-900/30">
