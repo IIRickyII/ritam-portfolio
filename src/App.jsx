@@ -15,11 +15,12 @@ import {
   Zap,
   Menu,
   X,
-  Bot,       // Added for Robotics
-  Activity,  // Added for IoT
-  Monitor,   // Added for Dashboard
-  Instagram, // Added for Instagram
-  Phone      // Added for Phone display
+  Bot,       
+  Activity,  
+  Monitor,   
+  Instagram, 
+  Phone,
+  GraduationCap
 } from 'lucide-react';
 
 // --- Data Constants ---
@@ -144,21 +145,24 @@ const EDUCATION = [
     degree: "MS in Nanotechnology",
     school: "KTH Royal Institute of Technology",
     period: "Aug 2025 - June 2027",
-    focus: "Nanofabrication, Semiconductor Physics, MEMS"
+    focus: "Nanofabrication, Semiconductor Physics, MEMS",
+    grade: "Status: Ongoing"
   },
   {
     id: 2,
     degree: "MS in Data Science",
     school: "Manipal Academy of Higher Education",
     period: "Apr 2023 - Mar 2025",
-    focus: "Machine Learning, Big Data, AI Foundations"
+    focus: "Machine Learning, Big Data, AI Foundations",
+    grade: "CGPA: 9.23"
   },
   {
     id: 3,
     degree: "B.Tech in Electronics & Comm. Engineering",
     school: "RCC Institute of Information Technology",
     period: "July 2018 - July 2022",
-    focus: "Electronics, Embedded Systems"
+    focus: "Electronics, Embedded Systems",
+    grade: "CGPA: 8.67"
   }
 ];
 
@@ -246,7 +250,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-slate-900/90 backdrop-blur-lg border-b border-white/10' : 'bg-transparent'}`}>
+    <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-slate-900/80 backdrop-blur-lg shadow-lg' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0 font-bold text-xl tracking-tighter text-white">
@@ -276,7 +280,7 @@ const Navbar = () => {
           </div>
           
           <div className="md:hidden">
-            <button onClick={() => setIsOpen(!isOpen)} className="text-slate-300 hover:text-white">
+            <button onClick={() => setIsOpen(!isOpen)} className="text-slate-300 hover:text-white p-2">
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
@@ -285,18 +289,25 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="md:hidden bg-slate-900 border-b border-white/10">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div className="md:hidden bg-slate-950/95 backdrop-blur-lg border-b border-white/10 absolute w-full top-16 left-0 z-40">
+          <div className="px-4 pt-2 pb-6 space-y-1">
             {navLinks.map((link) => (
               <a 
                 key={link.name} 
                 href={link.href} 
                 onClick={(e) => scrollToSection(e, link.href)}
-                className="text-slate-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium cursor-pointer"
+                className="text-slate-300 hover:text-white hover:bg-white/5 block px-3 py-4 rounded-md text-lg font-medium cursor-pointer border-b border-white/5"
               >
                 {link.name}
               </a>
             ))}
+            <a 
+                href="#contact" 
+                onClick={(e) => scrollToSection(e, '#contact')}
+                className="text-cyan-400 hover:text-cyan-300 block px-3 py-4 text-lg font-bold cursor-pointer"
+              >
+                Contact Me
+              </a>
           </div>
         </div>
       )}
@@ -321,16 +332,16 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-slate-950 pt-16">
-      {/* Background Effects */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden">
-        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[100px]" />
+    <div className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-slate-950 pt-16">
+      {/* Background Effects - overflow handled by parent */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] right-[-5%] w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-purple-600/20 rounded-full blur-[80px] md:blur-[120px]" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-cyan-600/10 rounded-full blur-[80px] md:blur-[100px]" />
         <div className="absolute top-[40%] left-[20%] w-[200px] h-[200px] bg-blue-600/10 rounded-full blur-[80px]" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-12">
-        <div className="flex-1 text-center md:text-left z-10">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center gap-12 z-10">
+        <div className="flex-1 text-center md:text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-cyan-400 text-sm font-medium mb-6 animate-fade-in-up">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
@@ -339,14 +350,14 @@ const Hero = () => {
             Open to Research Opportunities
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight tracking-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-white mb-6 leading-tight tracking-tight">
             Designing the Future <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-purple-500">
               Atom by Atom
             </span>
           </h1>
           
-          <p className="text-lg md:text-xl text-slate-400 mb-8 max-w-2xl mx-auto md:mx-0 leading-relaxed">
+          <p className="text-base md:text-xl text-slate-400 mb-8 max-w-2xl mx-auto md:mx-0 leading-relaxed">
             {PERSONAL_INFO.tagline} A unique blend of <span className="text-cyan-300">Software Engineering</span> expertise and advanced <span className="text-purple-300">Nanotechnology</span> research.
           </p>
           
@@ -364,8 +375,8 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Abstract Visualization */}
-        <div className="flex-1 w-full max-w-md md:max-w-full relative">
+        {/* Abstract Visualization - Hidden on very small screens if needed, or scaled */}
+        <div className="flex-1 w-full max-w-sm md:max-w-full relative mt-8 md:mt-0">
             <div className="relative aspect-square rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-8 shadow-2xl overflow-hidden group">
                 {/* Decorative Grid */}
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:40px_40px] opacity-20"></div>
@@ -373,17 +384,17 @@ const Hero = () => {
                 {/* Central Concept */}
                 <div className="absolute inset-0 flex items-center justify-center flex-col gap-6">
                     <div className="p-4 rounded-xl bg-slate-900/80 border border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.15)] transform transition-transform group-hover:scale-105 duration-500">
-                        <Dna size={48} className="text-purple-400" />
+                        <Dna size={32} md={48} className="text-purple-400 w-8 h-8 md:w-12 md:h-12" />
                     </div>
-                    <div className="h-16 w-0.5 bg-gradient-to-b from-purple-500/50 to-cyan-500/50"></div>
+                    <div className="h-12 md:h-16 w-0.5 bg-gradient-to-b from-purple-500/50 to-cyan-500/50"></div>
                     <div className="p-4 rounded-xl bg-slate-900/80 border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] transform transition-transform group-hover:scale-105 duration-500">
-                        <Cpu size={48} className="text-cyan-400" />
+                        <Cpu size={32} md={48} className="text-cyan-400 w-8 h-8 md:w-12 md:h-12" />
                     </div>
                 </div>
 
                 {/* Floating Tags */}
-                <div className="absolute top-8 left-8 bg-slate-800/80 px-3 py-1 rounded text-xs font-mono text-purple-300 border border-purple-500/30">Nanotechnology</div>
-                <div className="absolute bottom-8 right-8 bg-slate-800/80 px-3 py-1 rounded text-xs font-mono text-cyan-300 border border-cyan-500/30">Data Science</div>
+                <div className="absolute top-4 left-4 md:top-8 md:left-8 bg-slate-800/80 px-2 md:px-3 py-1 rounded text-[10px] md:text-xs font-mono text-purple-300 border border-purple-500/30">Nanotechnology</div>
+                <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 bg-slate-800/80 px-2 md:px-3 py-1 rounded text-[10px] md:text-xs font-mono text-cyan-300 border border-cyan-500/30">Data Science</div>
             </div>
         </div>
       </div>
@@ -397,7 +408,7 @@ const ExperienceCard = ({ item, isLast }) => {
       {/* Timeline Line (Desktop) */}
       <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px bg-white/10 -translate-x-1/2"></div>
       
-      {/* Mobile Line */}
+      {/* Mobile Line - precisely aligned */}
       <div className="md:hidden absolute left-[11px] top-2 bottom-0 w-px bg-white/10"></div>
       
       {/* Timeline Dot */}
@@ -443,7 +454,7 @@ const App = () => {
   const [activeTab, setActiveTab] = useState('all');
 
   return (
-    <div className="bg-slate-950 min-h-screen text-slate-300 font-sans selection:bg-cyan-500/30 selection:text-cyan-100">
+    <div className="bg-slate-950 min-h-screen text-slate-300 font-sans selection:bg-cyan-500/30 selection:text-cyan-100 overflow-x-hidden">
       <Navbar />
       
       <Hero />
@@ -572,14 +583,21 @@ const App = () => {
       {/* Education Section */}
       <section id="education" className="py-20 md:py-32 bg-slate-900/30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <SectionHeading title="Education" icon={ExternalLink} />
+            <SectionHeading title="Education" icon={GraduationCap} />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {EDUCATION.map((edu) => (
                     <div key={edu.id} className="group p-6 rounded-xl bg-slate-950 border border-white/5 hover:border-cyan-500/30 transition-all duration-300 hover:transform hover:-translate-y-1">
                         <div className="text-sm font-mono text-cyan-500 mb-2">{edu.period}</div>
                         <h3 className="text-lg font-bold text-white mb-1 group-hover:text-cyan-400 transition-colors">{edu.school}</h3>
-                        <div className="text-slate-300 font-medium mb-4">{edu.degree}</div>
-                        <p className="text-sm text-slate-500 border-t border-white/5 pt-4">
+                        <div className="text-slate-300 font-medium mb-2">{edu.degree}</div>
+                        {edu.grade && (
+                          <div className="mb-4">
+                            <span className="text-xs font-mono text-cyan-400 bg-cyan-950/30 px-2 py-1 rounded border border-cyan-500/20">
+                              {edu.grade}
+                            </span>
+                          </div>
+                        )}
+                        <p className={`text-sm text-slate-500 border-t border-white/5 pt-4 ${!edu.grade ? 'mt-4' : ''}`}>
                             Focus: {edu.focus}
                         </p>
                     </div>
