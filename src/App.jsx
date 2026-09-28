@@ -317,8 +317,8 @@ const MobileBottomNav = ({ scrollToSection, activeSection }) => {
   ];
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 md:hidden">
-      <div className="bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl shadow-slate-950/50 flex justify-between items-center px-4 py-3">
+    <div className="fixed bottom-0 left-0 right-0 z-50 px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] md:hidden">
+      <div className="bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl shadow-slate-950/50 flex justify-between items-center px-2 sm:px-4 py-3">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeSection === item.href.substring(1);
@@ -327,7 +327,7 @@ const MobileBottomNav = ({ scrollToSection, activeSection }) => {
               key={item.name}
               href={item.href}
               onClick={(e) => scrollToSection(e, item.href)}
-              className={`flex flex-col items-center gap-1 transition-all duration-300 ${
+              className={`flex min-w-12 min-h-12 flex-1 flex-col items-center justify-center gap-1 rounded-xl transition-all duration-300 ${
                 isActive ? 'text-cyan-400 scale-110' : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -497,7 +497,25 @@ const App = () => {
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    const sections = ['hero', 'about', 'experience', 'projects', 'skills', 'education', 'contact']
+      .map((id) => document.getElementById(id))
+      .filter(Boolean);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleSection = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visibleSection) setActiveSection(visibleSection.target.id);
+      },
+      { rootMargin: '-20% 0px -60% 0px', threshold: [0.1, 0.25, 0.5] }
+    );
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
+    };
   }, []);
 
   const scrollToSection = (e, href) => {
@@ -510,7 +528,7 @@ const App = () => {
 
       window.scrollTo({
         top: offsetPosition,
-        behavior: "smooth"
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? "auto" : "smooth"
       });
       setActiveSection(href.substring(1));
     }
