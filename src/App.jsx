@@ -12,6 +12,8 @@ import {
   ChevronDown, 
   Terminal,
   Dna,
+  Atom,
+  BrainCircuit,
   Zap,
   Menu,
   X,
@@ -37,7 +39,7 @@ const PERSONAL_INFO = {
   location: "Stockholm, Sweden",
   linkedin: "https://www.linkedin.com/in/ritam-biswas-56b5b715b",
   instagram: "https://www.instagram.com/ritam.biswas.10/",
-  summary: "I operate at the intersection of nanotechnology, semiconductor physics, and machine intelligence. Currently an MS student at KTH Royal Institute of Technology, my journey spans from transforming legacy tech as a Product Developer to diving deep into the science of nanoscale materials. I thrive on collaborating with bright minds to turn complex problems into sustainable, human-centered technologies."
+  summary: "I work at the intersection of nanotechnology, semiconductor physics, space plasma physics, and machine intelligence. Currently pursuing an MS in Nanotechnology at KTH Royal Institute of Technology, I contribute to satellite and ground-based instrument data analysis in Space Plasma Physics while building practical expertise in microfluidics, lab-on-chip systems, semiconductor devices, and nanoscale technologies. Previously, I spent more than three years at BMC Software modernizing enterprise mainframe development with Java, Python, AI/ML, automation, and language tooling."
 };
 
 const PROJECTS = [
@@ -86,48 +88,66 @@ const EXPERIENCE = [
   {
     id: 1,
     role: "Student Researcher",
-    company: "KTH Division of Micro and Nanosystems",
+    company: "KTH Royal Institute of Technology - Space Plasma Physics",
     location: "Stockholm, Sweden",
-    period: "Nov 2025 - Present",
+    period: "Sep 2026 - Present",
     type: "research",
-    description: "Working at the interface of nanotechnology, microfluidics, and neurobiology to advance organ-on-chip systems.",
+    description: "Conducting scientific analysis of satellite and ground-based instrument data at the Department of Electrical Engineering and Computer Science.",
     achievements: [
-      "Developing an open-source 3D gantry system for automated metabolic assessment and drug delivery.",
-      "Fabricating and testing microfluidic and lab-on-chip devices for biological experiments.",
-      "Managing cell culture preparation and experimental setups for complex bio-assays.",
-      "Conducting data collection and analysis to optimize experimental protocols."
+      "Processing and analysing observational datasets to identify trends, relationships, and relevant physical phenomena.",
+      "Conducting focused literature reviews and synthesizing research findings within the selected field.",
+      "Developing programming-based tools for data processing, analysis, visualization, and scientific presentation.",
+      "Applying reproducible computational methods to organize and present large scientific datasets."
     ]
   },
   {
     id: 2,
+    role: "Student Researcher",
+    company: "KTH Micro and Nanosystems (MST)",
+    location: "Stockholm, Sweden",
+    period: "Nov 2025 - Aug 2026",
+    type: "research",
+    description: "Supported multidisciplinary research at the intersection of nanotechnology and life sciences in the Winkler Lab.",
+    achievements: [
+      "Developed and optimized an open-source 3D gantry system for automated metabolic assessment and drug delivery in cell culture.",
+      "Assisted with the fabrication and testing of microfluidic and lab-on-chip devices for biological experiments.",
+      "Supported cell culture preparation, experimental setups, data collection, and routine analysis.",
+      "Collaborated with lab members on troubleshooting, scientific documentation, and research presentations."
+    ]
+  },
+  {
+    id: 3,
     role: "Product Developer 1",
     company: "BMC Software",
     location: "Pune, India",
     period: "May 2025 - July 2025",
     type: "industry",
-    description: "Core R&D team member modernizing mainframe development environments using Java and AI.",
+    description: "Core R&D team member developing BMC AMI DevX Workbench, a Java-based Eclipse solution for modernizing mainframe development.",
     achievements: [
+      "Developed IDE features and language tooling for mainframe technologies, including editors, parsers, grammars, and debuggers.",
       "Reduced syntax errors by 80% via improved grammars and semantic analysis.",
       "Increased parsing performance by 3-4x, enhancing UI responsiveness.",
-      "Integrated GenAI-powered features to bring AI into traditional dev flows."
+      "Enabled COBOL 6.3 support, migrated legacy REXX scripts to Python, and built GenAI-powered features.",
+      "Resolved 350+ issues across releases and contributed to 8+ major feature rollouts."
     ]
   },
   {
-    id: 3,
+    id: 4,
     role: "Associate Product Developer",
     company: "BMC Software",
     location: "Pune, India",
     period: "July 2022 - May 2025",
     type: "industry",
-    description: "Contributed to the evolution of BMC AMI DevX Workbench.",
+    description: "Contributed to the core development of BMC AMI DevX Workbench for COBOL, PL/I, and other z/OS technologies.",
     achievements: [
       "Migrated legacy automation scripts from REXX to Python.",
-      "Improved grammar accuracy for COBOL editors.",
-      "Resolved 150+ issues across releases, strengthening product reliability."
+      "Improved grammar accuracy and parsing performance for COBOL editors.",
+      "Supported COBOL 6.x syntax integration, debugger enhancements, and early AI/ML tooling.",
+      "Resolved 150+ issues across release cycles, strengthening product reliability."
     ]
   },
   {
-    id: 4,
+    id: 5,
     role: "Project Intern",
     company: "BMC Software",
     location: "Pune, India",
@@ -322,6 +342,14 @@ const MobileBottomNav = ({ scrollToSection, activeSection }) => {
 };
 
 const Hero = ({ scrollToSection }) => {
+  const [visualizationY, setVisualizationY] = useState(50);
+
+  const handleVisualizationPointerMove = (event) => {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const relativeY = ((event.clientY - bounds.top) / bounds.height) * 100;
+    setVisualizationY(Math.max(0, Math.min(100, relativeY)));
+  };
+
   return (
     <div id="hero" className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-slate-950 pt-16">
       {/* Background Effects - overflow handled by parent */}
@@ -368,18 +396,39 @@ const Hero = ({ scrollToSection }) => {
 
         {/* Abstract Visualization */}
         <div className="flex-1 w-full max-w-sm md:max-w-full relative mt-8 md:mt-0">
-            <div className="relative aspect-square rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-8 shadow-2xl overflow-hidden group">
+            <div
+              className="relative aspect-square rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-8 shadow-2xl overflow-hidden group"
+              onPointerMove={handleVisualizationPointerMove}
+            >
                 {/* Decorative Grid */}
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:40px_40px] opacity-20"></div>
+                <div
+                  className="absolute inset-0 pointer-events-none transition-[background] duration-300"
+                  style={{
+                    background: `radial-gradient(circle at 50% ${visualizationY}%, rgba(168, 85, 247, 0.16), transparent 38%)`
+                  }}
+                ></div>
                 
                 {/* Central Concept */}
                 <div className="absolute inset-0 flex items-center justify-center flex-col gap-6">
-                    <div className="p-4 rounded-xl bg-slate-900/80 border border-purple-500/30 shadow-[0_0_30px_rgba(168,85,247,0.15)] transform transition-transform group-hover:scale-105 duration-500">
-                        <Dna size={32} md={48} className="text-purple-400 w-8 h-8 md:w-12 md:h-12" />
+                    <div
+                      className="p-4 rounded-xl bg-slate-900/80 border border-purple-500/30 transform transition-[transform,box-shadow] duration-500"
+                      style={{
+                        transform: `translateY(${(50 - visualizationY) * 0.04}px) scale(${1 + Math.abs(50 - visualizationY) * 0.0008})`,
+                        boxShadow: `0 0 ${30 + Math.abs(50 - visualizationY) * 0.2}px rgba(168, 85, 247, ${0.15 + Math.abs(50 - visualizationY) * 0.002})`
+                      }}
+                    >
+                        <Atom size={32} md={48} className="text-purple-400 w-8 h-8 md:w-12 md:h-12" />
                     </div>
                     <div className="h-12 md:h-16 w-0.5 bg-gradient-to-b from-purple-500/50 to-cyan-500/50"></div>
-                    <div className="p-4 rounded-xl bg-slate-900/80 border border-cyan-500/30 shadow-[0_0_30px_rgba(6,182,212,0.15)] transform transition-transform group-hover:scale-105 duration-500">
-                        <Cpu size={32} md={48} className="text-cyan-400 w-8 h-8 md:w-12 md:h-12" />
+                    <div
+                      className="p-4 rounded-xl bg-slate-900/80 border border-cyan-500/30 transform transition-[transform,box-shadow] duration-500"
+                      style={{
+                        transform: `translateY(${(50 - visualizationY) * -0.04}px) scale(${1 + Math.abs(50 - visualizationY) * 0.0008})`,
+                        boxShadow: `0 0 ${30 + Math.abs(50 - visualizationY) * 0.2}px rgba(6, 182, 212, ${0.15 + Math.abs(50 - visualizationY) * 0.002})`
+                      }}
+                    >
+                        <BrainCircuit size={32} md={48} className="text-cyan-400 w-8 h-8 md:w-12 md:h-12" />
                     </div>
                 </div>
 
@@ -628,7 +677,7 @@ const App = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="text-3xl font-bold text-white mb-6">Let's Connect</h2>
             <p className="text-slate-400 mb-12 max-w-xl mx-auto">
-                I am currently open to research collaborations, internships, and opportunities in the field of Nanotechnology, MEMS, and Microfluidics.
+                I am currently open to research collaborations, internships, and opportunities in Nanotechnology, MEMS, and Semiconductor Technology.
             </p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
